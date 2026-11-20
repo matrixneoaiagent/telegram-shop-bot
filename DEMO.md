@@ -101,7 +101,7 @@ Regenerate them with `python -m scripts.make_mockups` (requires chromium).
 3. Show `/admin` in a test bot with the client's own catalog (needs their
    BotFather token).
 4. Place one real test order, then run `/setstatus`, `/tracking` and `/export`.
-5. Show the CI badge and `pytest -q` (72 tests).
+5. Show the CI badge and `pytest -q` (73 tests).
 
 ## Notes for the sales conversation
 

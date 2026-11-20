@@ -83,3 +83,16 @@ async def test_csv_has_no_bom(shop, make_order):
     await make_order()
     text = await services.export_orders_csv(shop["db"])
     assert not text.startswith("\ufeff")
+
+
+async def test_csv_neutralizes_formula_injection(shop, order_factory):
+    order = await order_factory(
+        customer_name='=HYPERLINK("http://evil.example")',
+        address="@SUM(1+1)",
+        phone="+373 60 123 456",
+    )
+    rows = read_csv(await services.export_orders_csv(shop["db"]))
+    assert rows[1][0] == order["order_number"]
+    assert rows[1][3].startswith("'=")
+    assert rows[1][4] == "+373 60 123 456"
+    assert rows[1][5].startswith("'@")

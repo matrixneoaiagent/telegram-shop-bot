@@ -468,6 +468,15 @@ async def set_tracking(db: Database, order_number: str, tracking_number: str) ->
     return order
 
 
+def _csv_cell(value: str) -> str:
+    """Neutralize spreadsheet formula injection without mangling phone numbers."""
+    if value and value[0] in ("=", "@", "\t", "\r"):
+        return "'" + value
+    if value and value[0] in ("+", "-") and any(character.isalpha() for character in value):
+        return "'" + value
+    return value
+
+
 async def export_orders_csv(db: Database, status: str | None = None) -> str:
     orders = await list_orders(db, status=status, limit=100_000)
     orders.reverse()
@@ -504,17 +513,17 @@ async def export_orders_csv(db: Database, status: str | None = None) -> str:
         summary = "; ".join(f"{item['quantity']}x {item['product_name']}" for item in items)
         writer.writerow(
             [
-                order["order_number"],
-                order["created_at"],
-                order["status"],
-                order["customer_name"],
-                order["phone"],
-                order["address"],
-                order["payment_method"],
+                _csv_cell(order["order_number"]),
+                _csv_cell(order["created_at"]),
+                _csv_cell(order["status"]),
+                _csv_cell(order["customer_name"]),
+                _csv_cell(order["phone"]),
+                _csv_cell(order["address"]),
+                _csv_cell(order["payment_method"]),
                 f"{order['total_cents'] / 100:.2f}",
-                order["currency"],
-                order["tracking_number"] or "",
-                summary,
+                _csv_cell(order["currency"]),
+                _csv_cell(order["tracking_number"] or ""),
+                _csv_cell(summary),
             ]
         )
     return buffer.getvalue()

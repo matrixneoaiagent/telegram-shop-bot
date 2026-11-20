@@ -28,4 +28,4 @@ jobs:
       - name: Check formatting
         run: ruff format --check .
       - name: Test
-        run: pytest -q
+        run: python -m pytest -q

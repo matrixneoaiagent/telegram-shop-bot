@@ -37,7 +37,7 @@ services. No card processor, no custody of funds, no external APIs.
   inspect orders, change status, export a CSV, see revenue and low stock.
 - **Safe defaults** — token and admin IDs come from environment variables;
   `.env` is git-ignored; tests run with a fake token and never call Telegram.
-- **Tests and CI** — 72 pytest tests, `ruff check` + `ruff format --check` on
+- **Tests and CI** — 73 pytest tests, `ruff check` + `ruff format --check` on
   Python 3.12 in GitHub Actions.
 
 ## Quickstart
@@ -65,7 +65,7 @@ The service layer, the demo and the tests are fully offline:
 
 ```bash
 python -m scripts.demo_walkthrough   # scripted catalog -> order -> tracking -> CSV
-pytest -q                            # 72 tests, temp SQLite, fake token
+pytest -q                            # 73 tests, temp SQLite, fake token
 ```
 
 ## Environment variables
@@ -107,7 +107,7 @@ bot/
     ├── admin.py       # admin commands and CSV export
     └── common.py      # admin filter, notifications
 
-tests/                 # 72 offline tests
+tests/                 # 73 offline tests
 scripts/
 ├── seed_demo.py       # demo catalog
 ├── demo_walkthrough.py# offline end-to-end demo
@@ -212,7 +212,7 @@ storage only if you need to survive restarts mid-checkout.
 ## Tests
 
 ```bash
-pytest -q          # 72 passed
+pytest -q          # 73 passed
 ruff check .
 ruff format --check .
 ```
@@ -229,6 +229,7 @@ SQLite file and a fake bot token; no network calls are made.
 - Admin commands are filtered by numeric Telegram user ID.
 - Buyers can only read orders whose `user_id` matches their own.
 - All SQL uses parameters; all user-controlled text is HTML-escaped.
+- CSV export neutralizes spreadsheet formula prefixes (CSV injection defense).
 - No card data is collected, stored or forwarded.
 
 **Limitations:** payment confirmation is manual (by design), there is no
