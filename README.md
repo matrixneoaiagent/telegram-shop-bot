@@ -160,7 +160,7 @@ in `order_events` and shown in `/order` (admin) and `/track` (buyer).
 | `/addcategory <name>` | Create a category. |
 | `/addproduct Name \| 12.50 \| 10 \| Category \| Description` | Add a product. |
 | `/editproduct <id> price\|stock\|name\|description\|category\|active <value>` | Edit a field. |
-| `/setphoto <id> <file_id or URL>` | Set the product photo. |
+| `/setphoto <id> <file_id or URL>` | Set the product photo. Send a photo to the bot to get its `file_id`. |
 | `/setstock <id> <qty>` / `/restock <id> <+/-qty>` | Set or adjust stock. |
 | `/toggleproduct <id>` | Hide/show a product. |
 | `/products` | List products with IDs and stock. |

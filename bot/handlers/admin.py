@@ -178,6 +178,17 @@ async def edit_product(message: Message, command, db: Database, settings: Settin
     )
 
 
+@router.message(F.photo)
+async def photo_file_id(message: Message) -> None:
+    """Admins can forward a product photo to get its Telegram file_id."""
+    file_id = message.photo[-1].file_id
+    await message.answer(
+        "Photo file_id:\n"
+        f"<code>{escape(file_id)}</code>\n\n"
+        "Attach it to a product with /setphoto &lt;product id&gt; &lt;file_id&gt;"
+    )
+
+
 @router.message(Command("setphoto"))
 async def set_photo(message: Message, command, db: Database) -> None:
     parts = _split_args(command.args, "/setphoto <id> <file_id or URL>")
